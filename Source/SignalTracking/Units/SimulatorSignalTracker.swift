@@ -71,7 +71,7 @@ public final class SimulatorSignalTracker: SignalTracker {
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(delay * i), execute: {
-      self.delegate?.signalTrackerWentBelowLevelThreshold(self)
+        self.delegate?.signalTrackerWentBelowLevelThreshold(self, atTime: time)
     })
   }
 

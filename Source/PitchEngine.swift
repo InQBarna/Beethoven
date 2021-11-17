@@ -3,9 +3,9 @@ import AVFoundation
 import Pitchy
 
 public protocol PitchEngineDelegate: AnyObject {
-  func pitchEngine(_ pitchEngine: PitchEngine, didReceivePitch pitch: Pitch)
-  func pitchEngine(_ pitchEngine: PitchEngine, didReceiveError error: Error)
-  func pitchEngineWentBelowLevelThreshold(_ pitchEngine: PitchEngine)
+  func pitchEngine(_ pitchEngine: PitchEngine, didReceivePitch pitch: Pitch, at time: AVAudioTime)
+  func pitchEngine(_ pitchEngine: PitchEngine, didReceiveError error: Error, at time: AVAudioTime?)
+  func pitchEngineWentBelowLevelThreshold(_ pitchEngine: PitchEngine, at time: AVAudioTime)
 }
 
 public final class PitchEngine {
@@ -92,7 +92,8 @@ public final class PitchEngine {
 
         guard granted else {
           weakSelf.delegate?.pitchEngine(weakSelf,
-                                         didReceiveError: Error.recordPermissionDenied)
+                                         didReceiveError: Error.recordPermissionDenied,
+                                         at: nil)
           return
         }
 
@@ -115,7 +116,7 @@ public final class PitchEngine {
       try signalTracker.start()
       active = true
     } catch {
-      delegate?.pitchEngine(self, didReceiveError: error)
+      delegate?.pitchEngine(self, didReceiveError: error, at: nil)
     }
   }
 }
@@ -138,20 +139,20 @@ extension PitchEngine: SignalTrackerDelegate {
 
           DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
-            self.delegate?.pitchEngine(self, didReceivePitch: pitch)
+            self.delegate?.pitchEngine(self, didReceivePitch: pitch, at: time)
           }
         } catch {
           DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
-            self.delegate?.pitchEngine(self, didReceiveError: error)
+            self.delegate?.pitchEngine(self, didReceiveError: error, at: time)
           }
         }
     }
   }
 
-  public func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker) {
+  public func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker, atTime time: AVAudioTime) {
     DispatchQueue.main.async {
-      self.delegate?.pitchEngineWentBelowLevelThreshold(self)
+      self.delegate?.pitchEngineWentBelowLevelThreshold(self, at: time)
     }
   }
 }

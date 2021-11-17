@@ -4,7 +4,8 @@ public protocol SignalTrackerDelegate: AnyObject {
   func signalTracker(_ signalTracker: SignalTracker,
                      didReceiveBuffer buffer: AVAudioPCMBuffer,
                      atTime time: AVAudioTime)
-  func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker)
+  func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker,
+                                            atTime time: AVAudioTime)
 }
 
 public enum SignalTrackerMode {
