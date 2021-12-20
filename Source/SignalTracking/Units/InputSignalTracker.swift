@@ -68,11 +68,11 @@ final class InputSignalTracker: SignalTracker {
 
       if averageLevel > levelThreshold {
         DispatchQueue.main.async {
-          self.delegate?.signalTracker(self, didReceiveBuffer: buffer, atTime: time)
+            self.delegate?.signalTracker(self, didReceiveBuffer: buffer, rmsLevel: averageLevel, atTime: time)
         }
       } else {
         DispatchQueue.main.async {
-          self.delegate?.signalTrackerWentBelowLevelThreshold(self, atTime: time)
+            self.delegate?.signalTrackerWentBelowLevelThreshold(self, rmsLevel: averageLevel, atTime: time)
         }
       }
     }

@@ -3,9 +3,9 @@ import AVFoundation
 import Pitchy
 
 public protocol PitchEngineDelegate: AnyObject {
-  func pitchEngine(_ pitchEngine: PitchEngine, didReceivePitch pitch: Pitch, at time: AVAudioTime)
+  func pitchEngine(_ pitchEngine: PitchEngine, didReceivePitch pitch: Pitch, rmsLevel: Float, at time: AVAudioTime)
   func pitchEngine(_ pitchEngine: PitchEngine, didReceiveError error: Error, at time: AVAudioTime?)
-  func pitchEngineWentBelowLevelThreshold(_ pitchEngine: PitchEngine, at time: AVAudioTime)
+  func pitchEngineWentBelowLevelThreshold(_ pitchEngine: PitchEngine, rmsLevel: Float, at time: AVAudioTime)
 }
 
 public final class PitchEngine {
@@ -126,6 +126,7 @@ public final class PitchEngine {
 extension PitchEngine: SignalTrackerDelegate {
   public func signalTracker(_ signalTracker: SignalTracker,
                             didReceiveBuffer buffer: AVAudioPCMBuffer,
+                            rmsLevel: Float,
                             atTime time: AVAudioTime) {
       queue.async { [weak self] in
         guard let `self` = self else { return }
@@ -139,7 +140,7 @@ extension PitchEngine: SignalTrackerDelegate {
 
           DispatchQueue.main.async { [weak self] in
             guard let `self` = self else { return }
-            self.delegate?.pitchEngine(self, didReceivePitch: pitch, at: time)
+              self.delegate?.pitchEngine(self, didReceivePitch: pitch, rmsLevel: rmsLevel, at: time)
           }
         } catch {
           DispatchQueue.main.async { [weak self] in
@@ -150,9 +151,9 @@ extension PitchEngine: SignalTrackerDelegate {
     }
   }
 
-  public func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker, atTime time: AVAudioTime) {
+  public func signalTrackerWentBelowLevelThreshold(_ signalTracker: SignalTracker, rmsLevel: Float, atTime time: AVAudioTime) {
     DispatchQueue.main.async {
-      self.delegate?.pitchEngineWentBelowLevelThreshold(self, at: time)
+      self.delegate?.pitchEngineWentBelowLevelThreshold(self, rmsLevel: rmsLevel, at: time)
     }
   }
 }
