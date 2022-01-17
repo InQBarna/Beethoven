@@ -59,11 +59,11 @@ public final class SimulatorSignalTracker: SignalTracker {
 
       if i == 0 {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50), execute: {
-            self.delegate?.signalTracker(self, didReceiveBuffer: buffer, rmsLevel: 0, atTime: time)
+            self.delegate?.signalTracker(self, didReceiveBuffer: buffer, rmsLevel: 0, mfccs: [], atTime: time)
         })
       } else {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(delay * i), execute: {
-            self.delegate?.signalTracker(self, didReceiveBuffer: buffer, rmsLevel: 0, atTime: time)
+            self.delegate?.signalTracker(self, didReceiveBuffer: buffer, rmsLevel: 0, mfccs: [], atTime: time)
         })
       }
 
@@ -71,7 +71,7 @@ public final class SimulatorSignalTracker: SignalTracker {
     }
 
     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(delay * i), execute: {
-        self.delegate?.signalTrackerWentBelowLevelThreshold(self, rmsLevel: 0, atTime: time)
+        self.delegate?.signalTrackerWentBelowLevelThreshold(self, rmsLevel: 0, mfccs: [], atTime: time)
     })
   }
 

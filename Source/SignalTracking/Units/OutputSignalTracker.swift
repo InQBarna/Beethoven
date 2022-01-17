@@ -49,7 +49,7 @@ final class OutputSignalTracker: SignalTracker {
 
     audioEngine.outputNode.installTap(onBus: bus, bufferSize: bufferSize, format: nil) { buffer, time in
       DispatchQueue.main.async {
-          self.delegate?.signalTracker(self, didReceiveBuffer: buffer, rmsLevel: 0, atTime: time)
+          self.delegate?.signalTracker(self, didReceiveBuffer: buffer, rmsLevel: 0, mfccs: [], atTime: time)
       }
     }
 
