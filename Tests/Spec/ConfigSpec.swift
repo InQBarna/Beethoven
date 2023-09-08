@@ -1,21 +1,21 @@
 @testable import Beethoven
-import Quick
 import Nimble
+import Quick
 
 final class ConfigSpec: QuickSpec {
-  override func spec() {
-    describe("Config") {
-      var config: Config!
+    override func spec() {
+        describe("Config") {
+            var config: Config!
 
-      describe("#init") {
-        it("sets default values") {
-          config = Config()
+            describe("#init") {
+                it("sets default values") {
+                    config = Config()
 
-          expect(config.bufferSize).to(equal(4096))
-          expect(config.estimationStrategy).to(equal(EstimationStrategy.yin))
-          expect(config.audioUrl).to(beNil())
+                    expect(config.bufferSize).to(equal(4096))
+                    expect(config.estimationStrategy).to(equal(EstimationStrategy.yin))
+                    expect(config.audioUrl).to(beNil())
+                }
+            }
         }
-      }
     }
-  }
 }

@@ -7,13 +7,13 @@
 //  by Matthias Mauch, Centre for Digital Music, Queen Mary, University of London.
 //
 
-import Foundation
 import AVFoundation
+import Foundation
 
 final class YINTransformer: Transformer {
-  func transform(buffer: AVAudioPCMBuffer) throws -> Buffer {
-    let buffer = try SimpleTransformer().transform(buffer: buffer)
-    let diffElements = YINUtil.differenceA(buffer: buffer.elements)
-    return Buffer(elements: diffElements)
-  }
+    func transform(buffer: AVAudioPCMBuffer) throws -> Buffer {
+        let buffer = try SimpleTransformer().transform(buffer: buffer)
+        let diffElements = YINUtil.differenceA(buffer: buffer.elements)
+        return Buffer(elements: diffElements)
+    }
 }
